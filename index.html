@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <h1>A simple tower defense game</h1>
+        <div class="controls">
+            <div>
+                <div class="indic">Level<br><span id="levelindic">1</span></div>&nbsp;&nbsp;
+                <div class="indic">Gold<br><span id="goldindic">1000</span></div>
+            </div>
+            <div class="prog">
+                <div id="hpindic" style="width: 0"></div>
+            </div>
+            <input type="button" onclick="update()" value="Upgrade" id="upgradebutton" disabled=""><br>
+            <input type="button" onclick="ctower=true;towerType=1" value="Place laser tower (40)" id="cTower1Bt" disabled=""><br>
+            <input type="button" onclick="ctower=true;towerType=2" value="Place AOE tower (200)" id="cTower2bt" disabled=""><br>
+            <input type="button" onclick="ctower=true;towerType=3" value="Place slow tower (1000)" id="cTower3Bt" disabled=""><br>
+            <input type="button" onclick="ctower=true;towerType=4" value="Place wall (10)" id="cTower4Bt" disabled=""><br>
+            <input type="button" onclick="sell()" value="Sell" id="sellbutton" disabled=""><br><br>
+
+            <input type="button" onclick="restart()" value="Restart">
+        </div>
+    </div>
+
+    <!--<div id="losetext"></div>-->
+    <canvas id="drawing" width="400" height="400" onmousedown="mouseDown(event)" onmousemove="mouseMove(event)"></canvas>
+</body>
+</html>
