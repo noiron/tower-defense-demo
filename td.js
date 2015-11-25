@@ -15,6 +15,11 @@ var towerCosts = [40, 200, 1000, 10];
 
 var playerHealth = 10;
 
+var ingameXSelect = 0;
+var ingameYSelect = 0;
+var ctower = false;
+var count = 0;
+
 init();
 requestAnimFrame = (function() {
     return window.requestAnimationFrame ||
@@ -24,10 +29,12 @@ requestAnimFrame = (function() {
             window.msRequestAnimationFrame ||
             function(callback) {
                 window.setTimeout(callback, 1000/30);
+
             };
     })();
 
 requestAnimFrame(draw);
+//setInterval(draw, 1000/30);
 
 
 function init() {
@@ -50,7 +57,33 @@ function snowParticle(dir, x, y) {
 }
 
 function wallTower(x, y) {
+    this.selected = false;
 
+    this.x = x;
+    this.y = y;
+    this.getXCenter = function() {
+        return this.x * gridWidth + this.x + gridWidth / 2 + 0.5;
+    };
+    this.getYCenter = function() {
+        return this.y * gridHeight + this.y + gridHeight / 2 + 0.5;
+    };
+
+    this.getSellValue = function() { return 0; };
+
+    this.draw = function() {
+        context.save();
+        context.translate(Math.floor(this.getXCenter()), Math.floor(this.getYCenter()));
+
+        if (this.selected) {
+            // If this tower is selected, draw rect around it
+            // TODO:
+        }
+
+        context.fillStyle = "#222";
+        context.fillRect(-0.4 * gridWidth, -0.4 * gridHeight, 0.8 * gridWidth, 0.8 * gridHeight);
+
+        context.restore();
+    }
 }
 
 function slowTower(x, y) {
@@ -73,27 +106,40 @@ function draw() {
     requestAnimFrame(draw);
     if (playerHealth <= 0) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
-
+    //alert();
     context.globalAlpha = 1;
-    context.fillStyle = "#aaaaaa";
+
+    // TODO: Draw the path
+    context.fillStyle = "#f00";
+
+    console.log(ctower);
+    // If you select a tower, fill the grid where mouse is
+    if (ctower) {
+        context.fillStyle = "#1fa";
+        console.log("...");
+        context.fillRect(ingameXSelect * (gridWidth+1), ingameYSelect * (gridHeight + 1), gridWidth, gridHeight );
+    }
+
+
 
     context.strokeStyle = "#000";
     context.lineWidth = 1;
     context.beginPath();
-
     // Draw vertical lines
-    for (var i = 0; i < 21; i++) {
-        context.moveTo(i * gridWidth + i, 0);
-        context.lineTo(i * gridWidth + i, canvas.height);
+    for (var i = 0; i < 11; i++) {
+        context.moveTo(i * (gridWidth + 1), 0);
+        context.lineTo(i * (gridWidth + 1), canvas.height);
     }
     context.stroke();
 
     // Draw horizontal lines
-    for (i = 0; i < 21; i++) {
+    for (i = 0; i < 11; i++) {
         context.moveTo(0, i * gridWidth + i);
         context.lineTo(canvas.width, i * gridWidth + i);
     }
     context.stroke();
+
+    count++;
 }
 
 //draw();
@@ -108,6 +154,18 @@ function sell() {
 
 function mouseMove(e) {
     var mouseX, mouseY;
+
+    if (e.offsetX) {
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+    }
+
+    // Calculate which grid mouse is in
+    ingameXSelect = Math.floor(mouseX / (gridWidth+1));
+    // console.log(mouseX, gridWidth, ingameXSelect);
+    ingameYSelect = Math.floor(mouseY / (gridHeight+1));
+
+
 }
 
 function upgrade() {
@@ -115,7 +173,7 @@ function upgrade() {
 }
 
 function controlsUpdate() {
-
+    document.getElementById("cTower4Bt").disabled = false;
 }
 
 function restart() {
@@ -155,3 +213,5 @@ function generatePath() {
 document.onkeydown = function(e) {
 
 };
+
+var wt = wallTower(5, 5);
