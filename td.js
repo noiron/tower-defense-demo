@@ -5,7 +5,8 @@
 
 var canvas = document.getElementById("drawing");
 var context = canvas.getContext("2d");
-
+/* Disable default right click on canvas */
+canvas.oncontextmenu = function() { return false};
 
 var gridWidth, gridHeight;
 var towers = [];
@@ -32,10 +33,7 @@ requestAnimFrame = (function() {
 
             };
     })();
-
-requestAnimFrame(draw);
-//setInterval(draw, 1000/30);
-
+ requestAnimFrame(draw);
 
 function init() {
     // calculate grid size by canvas's size and cols/rows num
@@ -112,11 +110,9 @@ function draw() {
     // TODO: Draw the path
     context.fillStyle = "#f00";
 
-    console.log(ctower);
     // If you select a tower, fill the grid where mouse is
     if (ctower) {
         context.fillStyle = "#1fa";
-        console.log("...");
         context.fillRect(ingameXSelect * (gridWidth+1), ingameYSelect * (gridHeight + 1), gridWidth, gridHeight );
     }
 
@@ -140,12 +136,32 @@ function draw() {
     context.stroke();
 
     count++;
+
+    /* Draw towers */
+    for (i = 0; i < towers.length; i++) {
+        towers[i].draw();
+    }
 }
 
-//draw();
-
 function mouseDown(e) {
+    if (playerHealth <= 0) return;
+    var mouseX, mouseY;
 
+    if (ctower) {
+        if (e.button == 2) {
+            ctower = false;
+            return false;
+        }
+
+        switch (towerType) {
+            case 4:
+                towers.push(new wallTower(ingameXSelect, ingameYSelect));
+                // ctower = false;
+                break;
+        }
+
+    }
+    return false;
 }
 
 function sell() {
@@ -213,5 +229,3 @@ function generatePath() {
 document.onkeydown = function(e) {
 
 };
-
-var wt = wallTower(5, 5);
