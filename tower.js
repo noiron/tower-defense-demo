@@ -2,7 +2,7 @@ function snowParticle(dir, x, y) {
 
 }
 
-function wallTower(x, y) {
+function WallTower(x, y) {
     this.selected = false;
 
     this.x = x;
